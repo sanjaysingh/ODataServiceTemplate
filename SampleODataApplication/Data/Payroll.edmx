@@ -1,0 +1,147 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="2.0" xmlns:edmx="http://schemas.microsoft.com/ado/2008/10/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="PayrollModel.Store" Alias="Self" Provider="System.Data.SqlServerCe.4.0" ProviderManifestToken="4.0" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
+        <EntityContainer Name="PayrollModelStoreContainer">
+          <EntitySet Name="Employee" EntityType="PayrollModel.Store.Employee" store:Type="Tables" />
+          <EntitySet Name="Project" EntityType="PayrollModel.Store.Project" store:Type="Tables" />
+          <AssociationSet Name="FK_Employee_Project" Association="PayrollModel.Store.FK_Employee_Project">
+            <End Role="Project" EntitySet="Project" />
+            <End Role="Employee" EntitySet="Employee" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="Employee">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="FirstName" Type="nvarchar" MaxLength="100" />
+          <Property Name="LastName" Type="nvarchar" MaxLength="100" />
+          <Property Name="Age" Type="int" />
+          <Property Name="Salary" Type="int" />
+          <Property Name="ProjectId" Type="int" />
+        </EntityType>
+        <EntityType Name="Project">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="100" />
+        </EntityType>
+        <Association Name="FK_Employee_Project">
+          <End Role="Project" Type="PayrollModel.Store.Project" Multiplicity="0..1" />
+          <End Role="Employee" Type="PayrollModel.Store.Employee" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Project">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Employee">
+              <PropertyRef Name="ProjectId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="PayrollModel" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
+        <EntityContainer Name="PayrollDb" annotation:LazyLoadingEnabled="true" >
+          <EntitySet Name="Employees" EntityType="PayrollModel.Employee" />
+          <EntitySet Name="Projects" EntityType="PayrollModel.Project" />
+          <AssociationSet Name="FK_Employee_Project" Association="PayrollModel.FK_Employee_Project">
+            <End Role="Project" EntitySet="Projects" />
+            <End Role="Employee" EntitySet="Employees" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="Employee">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Type="Int32" Name="Id" Nullable="false" />
+          <Property Type="String" Name="FirstName" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="LastName" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Type="Int32" Name="Age" />
+          <Property Type="Int32" Name="Salary" />
+          <Property Type="Int32" Name="ProjectId" />
+          <NavigationProperty Name="Project" Relationship="PayrollModel.FK_Employee_Project" FromRole="Employee" ToRole="Project" />
+        </EntityType>
+        <EntityType Name="Project">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Type="Int32" Name="Id" Nullable="false" />
+          <Property Type="String" Name="Name" MaxLength="100" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Employees" Relationship="PayrollModel.FK_Employee_Project" FromRole="Project" ToRole="Employee" />
+        </EntityType>
+        <Association Name="FK_Employee_Project">
+          <End Type="PayrollModel.Project" Role="Project" Multiplicity="0..1" />
+          <End Type="PayrollModel.Employee" Role="Employee" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Project">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Employee">
+              <PropertyRef Name="ProjectId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2008/09/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="PayrollModelStoreContainer" CdmEntityContainer="PayrollDb" >
+          <EntitySetMapping Name="Employees">
+            <EntityTypeMapping TypeName="PayrollModel.Employee">
+              <MappingFragment StoreEntitySet="Employee">
+                <ScalarProperty Name="ProjectId" ColumnName="ProjectId" />
+                <ScalarProperty Name="Salary" ColumnName="Salary" />
+                <ScalarProperty Name="Age" ColumnName="Age" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Projects">
+            <EntityTypeMapping TypeName="PayrollModel.Project">
+              <MappingFragment StoreEntitySet="Project">
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2008/10/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="True" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams>
+      <Diagram Name="Payroll" >
+        <EntityTypeShape EntityType="PayrollModel.Employee" Width="1.5" PointX="3" PointY="1" Height="2.3648893229166665" />
+        <EntityTypeShape EntityType="PayrollModel.Project" Width="1.5" PointX="0.75" PointY="1.375" Height="1.5956835937499996" />
+        <AssociationConnector Association="PayrollModel.FK_Employee_Project" >
+          <ConnectorPoint PointX="2.25" PointY="2.172841796875" />
+          <ConnectorPoint PointX="3" PointY="2.172841796875" />
+        </AssociationConnector>
+      </Diagram>
+    </Diagrams>
+  </Designer>
+</edmx:Edmx>
